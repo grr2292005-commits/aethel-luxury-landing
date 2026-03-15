@@ -1,0 +1,138 @@
+{
+  "name": "Puzzle #58: Hero Image Updater",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Update Hero Landing Page",
+        "formDescription": "Upload a new image to change the hero background.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "New Hero Image",
+              "fieldType": "file",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e44d34cd-9f7a-4c28-98e3-0c5d67a87125",
+      "name": "n8n Form Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "owner": "grr2292005-commits",
+        "repository": "aethel-luxury-landing",
+        "operation": "update",
+        "filePath": "public/hero-image.png",
+        "fileContent": "={{ $json.heroImage }}",
+        "commitMessage": "Update hero image via n8n Form"
+      },
+      "id": "1f46b622-c002-473c-a8a9-0c5d67a87125",
+      "name": "GitHub (Image)",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "owner": "grr2292005-commits",
+        "repository": "aethel-luxury-landing",
+        "operation": "get",
+        "filePath": "public/hero-data.json"
+      },
+      "id": "a0db2c87-4fef-4ef2-91c5-389eb8c75471",
+      "name": "GitHub (Get JSON)",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "fields": {
+          "values": [
+            {
+              "name": "heroImagePath",
+              "value": "/hero-image.png"
+            }
+          ]
+        },
+        "includeOtherFields": true
+      },
+      "id": "4eadb838-d8f6-40ab-9646-f00a1a923c36",
+      "name": "Edit Fields (Set)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "owner": "grr2292005-commits",
+        "repository": "aethel-luxury-landing",
+        "operation": "update",
+        "filePath": "public/hero-data.json",
+        "fileContent": "={{ JSON.stringify($json) }}",
+        "fileHashes": "={{ $node[\"GitHub (Get JSON)\"].json.sha }}",
+        "commitMessage": "Update hero metadata via n8n Form"
+      },
+      "id": "57d70be4-5bfe-4306-ac2f-e54e1392cc18",
+      "name": "GitHub (Update JSON)",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    }
+  ],
+  "connections": {
+    "n8n Form Trigger": {
+      "main": [
+        [
+          {
+            "node": "GitHub (Image)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub (Image)": {
+      "main": [
+        [
+          {
+            "node": "GitHub (Get JSON)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub (Get JSON)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields (Set)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields (Set)": {
+      "main": [
+        [
+          {
+            "node": "GitHub (Update JSON)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "hash": "..."
+}

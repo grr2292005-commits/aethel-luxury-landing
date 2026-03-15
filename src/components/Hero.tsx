@@ -5,7 +5,19 @@ import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 
 const Hero = () => {
-  const headline = "A Symphony of Silence & Light";
+  const [data, setData] = React.useState({
+    headline: "A Symphony of Silence & Light",
+    heroImagePath: "/images/hero.png"
+  });
+
+  React.useEffect(() => {
+    fetch('https://raw.githubusercontent.com/grr2292005-commits/aethel-luxury-landing/main/hero-data.json')
+      .then(res => res.json())
+      .then(setData)
+      .catch(err => console.error("Error loading hero data:", err));
+  }, []);
+
+  const headline = data.headline;
   const words = headline.split(" ");
 
   const container: Variants = {
@@ -47,7 +59,7 @@ const Hero = () => {
         className="absolute inset-0 z-0"
       >
         <Image
-          src="/images/hero.png"
+          src={data.heroImagePath}
           alt="Minimalist Architecture"
           fill
           className="object-cover"
