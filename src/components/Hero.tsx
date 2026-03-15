@@ -4,21 +4,15 @@ import React from 'react';
 import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 
-const Hero = () => {
-  const [data, setData] = React.useState({
-    headline: "A Symphony of Silence & Light",
-    heroImagePath: "/images/hero.png"
-  });
+interface HeroProps {
+  heroData: {
+    headline: string;
+    heroImagePath: string;
+  };
+}
 
-  React.useEffect(() => {
-    fetch('https://raw.githubusercontent.com/grr2292005-commits/aethel-luxury-landing/main/hero-data.json')
-      .then(res => res.json())
-      .then(setData)
-      .catch(err => console.error("Error loading hero data:", err));
-  }, []);
-
-  const headline = data.headline;
-  const words = headline.split(" ");
+const Hero = ({ heroData }: HeroProps) => {
+  const words = heroData.headline.split(" ");
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -56,10 +50,11 @@ const Hero = () => {
         initial={{ scale: 1.15, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 4, ease: [0.22, 1, 0.36, 1] }}
+        key={heroData.heroImagePath}
         className="absolute inset-0 z-0"
       >
         <Image
-          src={data.heroImagePath}
+          src={heroData.heroImagePath}
           alt="Minimalist Architecture"
           fill
           className="object-cover"
