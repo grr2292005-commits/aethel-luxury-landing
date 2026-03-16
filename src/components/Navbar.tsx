@@ -4,7 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-const Navbar = () => {
+interface NavbarProps {
+  onInquire?: () => void;
+}
+
+const Navbar = ({ onInquire }: NavbarProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -66,6 +70,7 @@ const Navbar = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={onInquire}
               className="bg-off-black text-white px-8 py-3 rounded-full text-[9px] uppercase tracking-[0.3em] font-semibold"
             >
               Inquire
